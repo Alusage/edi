@@ -5,7 +5,6 @@
   License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 -->
 <odoo noupdate="1">
-
     <record id="account_invoice_download_cron" model="ir.cron">
         <field name="name">Vendor Bills Auto-Download</field>
         <field name="active" eval="False" />
@@ -17,5 +16,4 @@
         <field name="model_id" ref="model_account_invoice_download_config" />
         <field name="code">model.run_cron()</field>
     </record>
-
 </odoo>
