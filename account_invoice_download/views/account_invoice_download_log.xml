@@ -14,14 +14,14 @@
                     name="web_ribbon"
                     title="Failure"
                     bg_color="bg-danger"
-                    attrs="{'invisible': [('result', '!=', 'failure')]}"
+                    invisible="result != 'failure'"
                     id="result_failure"
                 />
                 <widget
                     name="web_ribbon"
                     title="Success"
                     bg_color="bg-success"
-                    attrs="{'invisible': [('result', '!=', 'success')]}"
+                    invisible="result != 'success'"
                     id="result_success"
                 />
                 <group name="main">
@@ -46,16 +46,16 @@
         <field name="name">account.invoice.download.log.tree</field>
         <field name="model">account.invoice.download.log</field>
         <field name="arch" type="xml">
-            <tree decoration-danger="result == 'failure'">
+            <list decoration-danger="result == 'failure'" create="0">
                 <field name="create_date" string="Date" />
                 <field
                     name="partner_id"
-                    invisible="not context.get('download_log_main_view')"
+                    column_invisible="not context.get('download_log_main_view')"
                     optional="hide"
                 />
                 <field
                     name="download_config_id"
-                    invisible="not context.get('download_log_main_view')"
+                    column_invisible="not context.get('download_log_main_view')"
                 />
                 <field name="message" />
                 <field name="invoice_count" sum="1" />
@@ -65,7 +65,7 @@
                     decoration-danger="result == 'failure'"
                     widget="badge"
                 />
-            </tree>
+            </list>
         </field>
     </record>
 
@@ -141,7 +141,7 @@
     <record id="account_invoice_download_log_action" model="ir.actions.act_window">
         <field name="name">Download Bills Logs</field>
         <field name="res_model">account.invoice.download.log</field>
-        <field name="view_mode">tree,form,graph,pivot</field>
+        <field name="view_mode">list,form,graph,pivot</field>
         <field name="context">{'download_log_main_view': True}</field>
     </record>
 

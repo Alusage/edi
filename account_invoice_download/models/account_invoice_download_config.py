@@ -112,22 +112,18 @@ class AccountInvoiceDownloadConfig(models.Model):
             config.download_start_date = start_date
 
     @api.depends("partner_id", "backend", "method")
-    def name_get(self):
+    def _compute_display_name(self):
         backend2label = dict(
             self.fields_get("backend", "selection")["backend"]["selection"]
         )
         method2label = dict(
             self.fields_get("method", "selection")["method"]["selection"]
         )
-        res = []
         for rec in self:
-            name = "%s (%s / %s)" % (
-                rec.partner_id.name,
-                backend2label.get(rec.backend, "-"),
-                method2label.get(rec.method, "-"),
-            )
-            res.append((rec.id, name))
-        return res
+            backend = backend2label.get(rec.backend, "-")
+            method = method2label.get(rec.method, "-")
+            name = f"{rec.partner_id.name} ({backend} / {method})"
+            rec.display_name = name
 
     def credentials_stored(self):
         if self.login and self.password:
@@ -169,7 +165,7 @@ class AccountInvoiceDownloadConfig(models.Model):
                     {
                         "views": False,
                         "view_id": False,
-                        "domain": "[('id', 'in', %s)]" % invoice_ids,
+                        "domain": f"[('id', 'in', {invoice_ids})]",
                     }
                 )
             else:
@@ -266,7 +262,7 @@ class AccountInvoiceDownloadConfig(models.Model):
                 invoice = aiio.create_invoice(
                     parsed_inv,
                     import_config=import_config,
-                    origin="Download Bill '%s'" % self.display_name,
+                    origin=_("Download Bill '%s'") % self.display_name,
                 )
             except Exception as e:
                 logs["msg"].append(

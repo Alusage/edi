@@ -68,9 +68,8 @@ class AccountInvoiceDownloadCredentials(models.TransientModel):
             download_config.last_run = fields.Date.context_today(self)
             vals["log_id"] = log_id
             if invoice_ids:
-                vals["invoice_ids_str"] = "[%s]" % ",".join(
-                    [str(inv_id) for inv_id in invoice_ids]
-                )
+                invoice_ids_str = ",".join([str(inv_id) for inv_id in invoice_ids])
+                vals["invoice_ids_str"] = f"[{invoice_ids_str}]"
         return super().create(vals_list)
 
     def run(self):
@@ -83,7 +82,7 @@ class AccountInvoiceDownloadCredentials(models.TransientModel):
                 {
                     "views": False,
                     "view_id": False,
-                    "domain": "[('id', 'in', %s)]" % self.invoice_ids_str,
+                    "domain": f"[('id', 'in', {self.invoice_ids_str})]",
                 }
             )
         else:
@@ -93,7 +92,7 @@ class AccountInvoiceDownloadCredentials(models.TransientModel):
                 {
                     "res_id": self.log_id.id,
                     "views": False,
-                    "view_mode": "form,tree",
+                    "view_mode": "form,list",
                 }
             )
         return action

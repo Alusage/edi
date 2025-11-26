@@ -41,7 +41,7 @@ class ResPartner(models.Model):
                     "views": False,
                     "view_id": False,
                     "res_id": download_configs.id,
-                    "view_mode": "form,tree",
+                    "view_mode": "form,list",
                 }
             )
         else:
