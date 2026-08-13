@@ -22,7 +22,7 @@ class TestInvoiceImport(TransactionCase):
             {
                 "code": "612AII",
                 "name": "expense account invoice import",
-                "account_type": "expense",
+                "user_type_id": cls.env.ref("account.data_account_type_expenses").id,
                 "company_id": cls.company.id,
             }
         )
@@ -30,7 +30,7 @@ class TestInvoiceImport(TransactionCase):
             {
                 "code": "707AII",
                 "name": "revenue account invoice import",
-                "account_type": "income",
+                "user_type_id": cls.env.ref("account.data_account_type_revenue").id,
                 "company_id": cls.company.id,
             }
         )
@@ -38,7 +38,7 @@ class TestInvoiceImport(TransactionCase):
             {
                 "code": "658AII",
                 "name": "Adjustment debit account",
-                "account_type": "expense",
+                "user_type_id": cls.env.ref("account.data_account_type_expenses").id,
                 "company_id": cls.company.id,
             }
         )
@@ -46,7 +46,7 @@ class TestInvoiceImport(TransactionCase):
             {
                 "code": "758AII",
                 "name": "Adjustment credit account",
-                "account_type": "income",
+                "user_type_id": cls.env.ref("account.data_account_type_revenue").id,
                 "company_id": cls.company.id,
             }
         )

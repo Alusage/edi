@@ -450,7 +450,7 @@ class TestBaseBusinessDocumentImport(TransactionCase):
             {
                 "name": "Test 898999",
                 "code": "898999",
-                "account_type": "expense",
+                "user_type_id": self.env.ref("account.data_account_type_expenses").id,
             }
         )
         res = bdio._match_account({"code": "898999"}, [])
@@ -462,7 +462,7 @@ class TestBaseBusinessDocumentImport(TransactionCase):
             {
                 "name": "Test 898999",
                 "code": "898999",
-                "account_type": "expense",
+                "user_type_id": self.env.ref("account.data_account_type_expenses").id,
             }
         )
         res = bdio._match_account({"code": "89899900"}, [])
@@ -474,7 +474,7 @@ class TestBaseBusinessDocumentImport(TransactionCase):
             {
                 "name": "Test 89899910",
                 "code": "89899910",
-                "account_type": "expense",
+                "user_type_id": self.env.ref("account.data_account_type_expenses").id,
             }
         )
         chatter = []
