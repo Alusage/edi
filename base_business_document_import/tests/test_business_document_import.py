@@ -326,7 +326,7 @@ class TestBaseBusinessDocumentImport(TransactionCase):
                         0,
                         0,
                         {
-                            "partner_id": self.env.ref("base.res_partner_2").id,
+                            "name": self.env.ref("base.res_partner_2").id,
                             "product_code": "TEST1242",
                         },
                     ),

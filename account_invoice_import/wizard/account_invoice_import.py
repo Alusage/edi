@@ -1021,7 +1021,15 @@ class AccountInvoiceImport(models.TransientModel):
                     )
                     # Add the adjustment line
                     vals = self._prepare_adjustment_line(iline, diff_amount)
-                    adj_line = amlo.create(vals)
+                    # 15.0: creating a move line one by one leaves the move
+                    # unbalanced until the dynamic lines (taxes, payment terms)
+                    # are recomputed; 16.0 does it on create(). Same sequence as
+                    # the 14.0 version of this module.
+                    adj_line = amlo.with_context(check_move_validity=False).create(vals)
+                    invoice.with_context(
+                        check_move_validity=False
+                    )._recompute_dynamic_lines(recompute_all_taxes=True)
+                    invoice._check_balanced()
                     logger.info("Adjustment invoice line created ID %d", adj_line.id)
         # Fallback: create global adjustment line
         if parsed_inv["currency_rec"].compare_amounts(
@@ -1039,7 +1047,11 @@ class AccountInvoiceImport(models.TransientModel):
             il_vals = self._prepare_global_adjustment_line(
                 diff_amount, invoice, import_config
             )
-            mline = amlo.create(il_vals)
+            mline = amlo.with_context(check_move_validity=False).create(il_vals)
+            invoice.with_context(
+                check_move_validity=False
+            )._recompute_dynamic_lines(recompute_all_taxes=True)
+            invoice._check_balanced()
             logger.info("Global adjustment invoice line created ID %d", mline.id)
         assert not parsed_inv["currency_rec"].compare_amounts(
             parsed_inv["amount_untaxed"], invoice.amount_untaxed

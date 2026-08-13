@@ -671,7 +671,9 @@ class BusinessDocumentImport(models.AbstractModel):
             sinfo = self.env["product.supplierinfo"].search(
                 self._match_company_domain()
                 + [
-                    ("partner_id", "=", seller.id),
+                    # 15.0: product.supplierinfo.partner_id is the 16.0 name of
+                    # this field; here the vendor is still called "name".
+                    ("name", "=", seller.id),
                     ("product_code", "=", product_dict["code"]),
                 ],
                 limit=1,
