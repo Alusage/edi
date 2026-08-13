@@ -15,6 +15,43 @@ class AccountMove(models.Model):
     # JSON string, and every reader/writer goes through json.loads/dumps.
     import_partner_data = fields.Text()
 
+    def _check_total_amount(self, amount_total):
+        """15.0 stand-in for the account.move method added in 16.0.
+
+        16.0 absorbs the rounding difference in the tax group of tax_totals;
+        neither that method nor that field exist here (15.0 has tax_totals_json),
+        so force the difference onto the first non-zero tax line, which is what
+        the 14.0 version of this module did. Does nothing when the invoice
+        carries no tax line — the caller reports that case to the chatter.
+        """
+        self.ensure_one()
+        if not amount_total:
+            return
+        currency = self.currency_id
+        diff = amount_total - self.amount_total
+        if currency.is_zero(diff):
+            return
+        for mline in self.line_ids:
+            if not mline.tax_line_id or currency.is_zero(mline.amount_currency):
+                continue
+            sign = 1 if currency.compare_amounts(mline.amount_currency, 0) >= 0 else -1
+            new_amount_currency = currency.round(mline.amount_currency + sign * diff)
+            new_balance = currency._convert(
+                new_amount_currency,
+                self.company_id.currency_id,
+                self.company_id,
+                self.date,
+            )
+            vals = {"amount_currency": new_amount_currency}
+            if self.company_id.currency_id.compare_amounts(new_balance, 0) > 0:
+                vals.update({"debit": new_balance, "credit": 0})
+            else:
+                vals.update({"debit": 0, "credit": -new_balance})
+            mline.with_context(check_move_validity=False).write(vals)
+            self.with_context(check_move_validity=False)._recompute_dynamic_lines()
+            self._check_balanced()
+            break
+
     @api.depends("state", "import_warnings")
     def _compute_show_import_warnings(self):
         for move in self:
