@@ -5,6 +5,7 @@
 
 import base64
 import html
+import json
 import logging
 import mimetypes
 from datetime import datetime
@@ -217,7 +218,7 @@ class AccountInvoiceImport(models.TransientModel):
                     and key not in ("country_code", "state_code")
                 ):
                     partner_data[key] = value
-            vals["import_partner_data"] = partner_data
+            vals["import_partner_data"] = json.dumps(partner_data)
 
     @api.model
     def _prepare_create_invoice_journal(self, parsed_inv, import_config, vals):

@@ -2,6 +2,8 @@
 # @author: Alexis de Lattre <alexis.delattre@akretion.com>
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
 
+import json
+
 from odoo import _, api, fields, models
 from odoo.exceptions import UserError
 
@@ -13,7 +15,8 @@ class AccountInvoiceImportPartnerCreate(models.TransientModel):
     move_id = fields.Many2one(
         "account.move", readonly=True, required=True, string="Vendor Bill"
     )
-    import_partner_data = fields.Json()
+    # 15.0: fields.Json is 16.0+, see account.move.import_partner_data
+    import_partner_data = fields.Text()
     create_or_update = fields.Selection(
         [
             ("create", "This partner doesn't already exists in Odoo"),
@@ -38,9 +41,9 @@ class AccountInvoiceImportPartnerCreate(models.TransientModel):
         ):
             res["move_id"] = self._context["active_id"]
             move = self.env["account.move"].browse(res["move_id"])
-            import_partner_data = move.import_partner_data
-            assert import_partner_data
-            res["import_partner_data"] = import_partner_data
+            assert move.import_partner_data
+            res["import_partner_data"] = move.import_partner_data
+            import_partner_data = json.loads(move.import_partner_data)
             if import_partner_data.get("vat"):
                 res["partner_vat"] = import_partner_data["vat"]
             if import_partner_data.get("name"):
@@ -53,11 +56,12 @@ class AccountInvoiceImportPartnerCreate(models.TransientModel):
 
     def create_partner(self):
         self.ensure_one()
-        assert isinstance(self.import_partner_data, dict)
+        import_partner_data = json.loads(self.import_partner_data or "null")
+        assert isinstance(import_partner_data, dict)
         assert self.move_id
         assert self.create_or_update == "create"
         ctx = {
-            f"default_{key}": value for key, value in self.import_partner_data.items()
+            f"default_{key}": value for key, value in import_partner_data.items()
         }
         ctx["default_invoice_import_move_id"] = self.move_id.id
         action = {
@@ -74,7 +78,9 @@ class AccountInvoiceImportPartnerCreate(models.TransientModel):
         assert self.create_or_update == "update"
         if not self.update_partner_id:
             raise UserError(_("You must select the partner to update."))
-        self.update_partner_id._invoice_import_update_partner(self.import_partner_data)
+        self.update_partner_id._invoice_import_update_partner(
+            json.loads(self.import_partner_data)
+        )
         self.move_id._invoice_import_set_partner_and_update_lines(
             self.update_partner_id
         )

@@ -11,7 +11,9 @@ class AccountMove(models.Model):
 
     import_warnings = fields.Html(readonly=True)
     show_import_warnings = fields.Boolean(compute="_compute_show_import_warnings")
-    import_partner_data = fields.Json()
+    # 15.0: fields.Json only exists from 16.0 on. The payload is kept as a
+    # JSON string, and every reader/writer goes through json.loads/dumps.
+    import_partner_data = fields.Text()
 
     @api.depends("state", "import_warnings")
     def _compute_show_import_warnings(self):
