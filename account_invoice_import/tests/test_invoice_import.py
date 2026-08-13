@@ -341,10 +341,10 @@ class TestInvoiceImport(TransactionCase):
         types = [line.display_type for line in inv.invoice_line_ids]
         self.assertIn("line_section", types)
         self.assertIn("line_note", types)
-        self.assertIn("product", types)
+        self.assertIn(False, types)
         # Check product line exists and has correct product and qty
         prod_lines = [
-            line for line in inv.invoice_line_ids if line.display_type == "product"
+            line for line in inv.invoice_line_ids if not line.display_type
         ]
         self.assertEqual(len(prod_lines), 1)
         prod_line = prod_lines[0]

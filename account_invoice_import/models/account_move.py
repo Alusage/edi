@@ -43,7 +43,7 @@ class AccountMove(models.Model):
             for tax_entry in fp.tax_ids:
                 tax_map[tax_entry.tax_src_id.id] = tax_entry.tax_dest_id.id or False
             for iline in self.invoice_line_ids.filtered(
-                lambda x: x.display_type == "product"
+                lambda x: not x.display_type
             ):
                 vals = {}
                 if iline.account_id.id in account_map:

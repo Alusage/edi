@@ -360,7 +360,6 @@ class AccountInvoiceImport(models.TransientModel):
     @api.model
     def _prepare_line_vals_1line(self, parsed_inv, import_config, vals, partner):
         il_vals = {
-            "display_type": "product",
             "quantity": 1,
         }
         if import_config.get("label"):
@@ -482,7 +481,6 @@ class AccountInvoiceImport(models.TransientModel):
             )
 
             il_vals = {
-                "display_type": "product",
                 "product_id": product and product.id or False,
                 "product_uom_id": uom.id,
                 "account_id": account.id,
@@ -524,7 +522,7 @@ class AccountInvoiceImport(models.TransientModel):
         if import_config.get("previous_invoice"):
             inv = import_config["previous_invoice"]
             ilines = inv.invoice_line_ids.filtered(
-                lambda x: x.display_type == "product"
+                lambda x: not x.display_type
             )
             if ilines:
                 iline = ilines[0]
@@ -975,7 +973,6 @@ class AccountInvoiceImport(models.TransientModel):
 
         il_vals = {
             "move_id": invoice.id,
-            "display_type": "product",
             "name": _("Adjustment"),
             "account_id": account.id,
             "quantity": sign,
@@ -987,7 +984,6 @@ class AccountInvoiceImport(models.TransientModel):
     def _prepare_adjustment_line(self, iline, diff_amount):
         vals = {
             "move_id": iline.move_id.id,
-            "display_type": "product",
             "account_id": iline.account_id.id,
             "name": _("Adjustment on %s") % iline.name,
             "quantity": 1,
