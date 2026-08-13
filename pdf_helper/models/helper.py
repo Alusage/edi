@@ -3,7 +3,10 @@
 # License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl).
 import logging
 
-from PyPDF2.utils import PdfReadError
+try:
+    from PyPDF2.errors import PdfReadError
+except ImportError:  # PyPDF2 < 2.0
+    from PyPDF2.utils import PdfReadError
 
 from odoo import models
 
