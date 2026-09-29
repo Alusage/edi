@@ -1,0 +1,2 @@
+id,name,model_id:id,group_id/id,operation,domain
+access_ovh_api_credentials,Full access on wizard ovh.api.credentials,model_ovh_api_credentials,account.group_account_invoice,cru,

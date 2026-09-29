@@ -4,7 +4,7 @@
 
 {
     "name": "Account Invoice Download OVH",
-    "version": "18.0.1.0.0",
+    "version": "20.0.1.0.0",
     "category": "Accounting",
     "license": "AGPL-3",
     "summary": "Get OVH Invoice via the API",
@@ -16,7 +16,7 @@
     "data": [
         "wizard/ovh_api_credentials_view.xml",
         "views/account_invoice_download_config.xml",
-        "security/ir.model.access.csv",
+        "security/ir.access.csv",
     ],
     "demo": ["demo/ovh_demo.xml"],
     "installable": True,
