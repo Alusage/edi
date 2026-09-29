@@ -23,7 +23,7 @@ logger = logging.getLogger(__name__)
 LOGLEVELS = {
     "debug": logging.DEBUG,
     "info": logging.INFO,
-    "warn": logging.WARN,
+    "warn": logging.WARNING,
     "error": logging.ERROR,
     "critical": logging.CRITICAL,
 }
@@ -178,7 +178,6 @@ class AccountMove(models.Model):
                     party_identification, ns["ram"] + "ID", schemeID=scheme_name
                 )
                 party_identification_id.text = party_id_text
-        return
 
     def _cii_trade_agreement_buyer_ref(self, partner):
         return False
