@@ -101,7 +101,6 @@ class AccountInvoiceDownloadConfig(models.Model):
             )
         filename = f"OVH_invoice_{parsed_inv['invoice_number']}.pdf"
         parsed_inv["attachments"] = {filename: res}
-        return
 
     def ovh_download(self, credentials, logs):
         invoices = []
@@ -181,8 +180,7 @@ class AccountInvoiceDownloadConfig(models.Model):
             self.ovh_invoice_attach_pdf(parsed_inv, res_inv["pdfUrl"])
 
             logger.info(
-                "Starting OVH API query /me/bill/%s/details "
-                "invoice number %s dated %s",
+                "Starting OVH API query /me/bill/%s/details invoice number %s dated %s",
                 oinv_num,
                 parsed_inv["invoice_number"],
                 parsed_inv["date"],
