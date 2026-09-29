@@ -4,7 +4,7 @@
 
 {
     "name": "Account Invoice Import",
-    "version": "19.0.1.1.0",
+    "version": "20.0.1.1.0",
     "category": "Accounting & Finance",
     "license": "AGPL-3",
     "summary": "Import supplier invoices/refunds as PDF or XML files",
@@ -20,7 +20,7 @@
         "pdf_xml_attachment",
     ],
     "data": [
-        "security/ir.model.access.csv",
+        "security/ir.access.csv",
         "views/res_config_settings.xml",
         "wizard/account_invoice_import_view.xml",
         "wizard/account_invoice_import_partner_create_view.xml",
