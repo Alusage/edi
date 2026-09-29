@@ -302,7 +302,7 @@ class BusinessDocumentImport(models.AbstractModel):
     # TODO: maybe we should remove partner_type in future versions
     # and add a company= arg
     @api.model
-    def _match_partner(  # noqa: C901
+    def _match_partner(
         self,
         partner_dict,
         chatter_msg,
