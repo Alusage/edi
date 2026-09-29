@@ -4,7 +4,7 @@
 
 {
     "name": "Account Invoice Download",
-    "version": "18.0.1.1.1",
+    "version": "20.0.1.1.1",
     "category": "Accounting",
     "license": "AGPL-3",
     "summary": "Auto-download supplier invoices and import them",
@@ -16,7 +16,7 @@
     ],
     "data": [
         "security/rule.xml",
-        "security/ir.model.access.csv",
+        "security/ir.access.csv",
         "views/account_invoice_download_config.xml",
         "views/account_invoice_download_log.xml",
         "views/res_partner.xml",
