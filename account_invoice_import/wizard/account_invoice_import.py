@@ -542,8 +542,10 @@ class AccountInvoiceImport(models.TransientModel):
             else:
                 type_tax_use = "purchase"
             import_config["taxes"] = import_config["taxes"].filtered(
-                lambda x: x.company_id.id == import_config["company"].id
-                and x.type_tax_use == type_tax_use
+                lambda x: (
+                    x.company_id.id == import_config["company"].id
+                    and x.type_tax_use == type_tax_use
+                )
             )
         if (
             import_config["account"]
