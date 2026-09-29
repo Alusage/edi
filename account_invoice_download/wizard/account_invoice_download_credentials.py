@@ -29,9 +29,9 @@ class AccountInvoiceDownloadCredentials(models.TransientModel):
     @api.model
     def default_get(self, fields_list):
         res = super().default_get(fields_list)
-        assert (
-            self._context.get("active_model") == "account.invoice.download.config"
-        ), "Wrong active_model"
+        assert self._context.get("active_model") == "account.invoice.download.config", (
+            "Wrong active_model"
+        )
         assert self._context.get("active_id"), "Missing active_id"
         config = self.env["account.invoice.download.config"].browse(
             self._context["active_id"]
