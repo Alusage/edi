@@ -11,7 +11,6 @@ class AccountMove(models.Model):
     def get_payment_identifier(self):
         """This method is designed to be inherited in localization modules"""
         self.ensure_one()
-        return None
 
     def _xml_format_in_pdf_invoice(self):
         """Returns the format if it is possible to generate the XML
@@ -42,7 +41,6 @@ class AccountMove(models.Model):
         instead of the tax. If it returns None, Odoo will get it from the tax.
         """
         self.ensure_one()
-        return None
 
     def _select_move_type_for_xml_in_pdf(self):
         """Override me if you want to add other move types"""

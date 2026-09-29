@@ -7,7 +7,7 @@
     "version": "18.0.1.0.0",
     "category": "Accounting & Finance",
     "license": "AGPL-3",
-    "summary": "Technical module to generate PDF invoices with " "embedded XML file",
+    "summary": "Technical module to generate PDF invoices with embedded XML file",
     "author": "Akretion,Onestein,Odoo Community Association (OCA)",
     "maintainers": ["alexis-via"],
     "website": "https://github.com/OCA/edi",
