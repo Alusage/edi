@@ -89,7 +89,7 @@
                     name="failure"
                     domain="[('result', '=', 'failure')]"
                 />
-                <group string="Group By" name="groupby">
+                <group name="groupby">
                     <filter
                         name="result_groupby"
                         string="Result"

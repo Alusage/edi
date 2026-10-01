@@ -14,7 +14,6 @@
     "depends": [
         "account_einvoice_generate",
         "base_facturx",
-        "base_vat",
     ],
     "external_dependencies": {"python": ["factur-x"]},
     "data": [

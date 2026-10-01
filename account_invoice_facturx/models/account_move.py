@@ -313,14 +313,14 @@ class AccountMove(models.Model):
                 partner_bank = (
                     self.preferred_payment_method_line_id.journal_id.bank_account_id
                 )
-            if partner_bank and partner_bank.acc_type == "iban":
+            if partner_bank and partner_bank.account_type == "iban":
                 payment_means_bank_account = etree.SubElement(
                     payment_means, ns["ram"] + "PayeePartyCreditorFinancialAccount"
                 )
                 iban = etree.SubElement(
                     payment_means_bank_account, ns["ram"] + "IBANID"
                 )
-                iban.text = partner_bank.sanitized_acc_number
+                iban.text = partner_bank.sanitized_account_number
                 if partner_bank.bank_bic:
                     payment_means_bank = etree.SubElement(
                         payment_means,
@@ -335,14 +335,14 @@ class AccountMove(models.Model):
             payment_means_code.text in DIRECT_DEBIT_CODES
             and hasattr(self, "mandate_id")
             and self.mandate_id.partner_bank_id
-            and self.mandate_id.partner_bank_id.acc_type == "iban"
-            and self.mandate_id.partner_bank_id.sanitized_acc_number
+            and self.mandate_id.partner_bank_id.account_type == "iban"
+            and self.mandate_id.partner_bank_id.sanitized_account_number
         ):
             debtor_acc = etree.SubElement(
                 payment_means, ns["ram"] + "PayerPartyDebtorFinancialAccount"
             )
             debtor_acc_iban = etree.SubElement(debtor_acc, ns["ram"] + "IBANID")
-            debtor_acc_iban.text = self.mandate_id.partner_bank_id.sanitized_acc_number
+            debtor_acc_iban.text = self.mandate_id.partner_bank_id.sanitized_account_number
 
     def _cii_trade_payment_terms_block(self, trade_settlement, ns):
         trade_payment_term = etree.SubElement(

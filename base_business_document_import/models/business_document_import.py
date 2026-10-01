@@ -589,7 +589,7 @@ class BusinessDocumentImport(models.AbstractModel):
                     self._match_company_domain(),
                     Domain.AND(
                         [
-                            Domain("acc_number", "=", iban),
+                            Domain("account_number", "=", iban),
                             Domain("partner_id", "=", partner.id),
                         ]
                     ),
@@ -612,7 +612,7 @@ class BusinessDocumentImport(models.AbstractModel):
                     )
                     bank_id = bank.id
             partner_bank = rpbo.create(
-                {"partner_id": partner.id, "acc_number": iban, "bank_id": bank_id}
+                {"partner_id": partner.id, "account_number": iban, "bank_id": bank_id}
             )
             chatter_msg.append(
                 self.env._(
