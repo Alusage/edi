@@ -86,18 +86,14 @@ class AccountInvoiceDownloadConfig(models.Model):
     )
     interval_number = fields.Integer(string="Frequency", default=1)
 
-    _sql_constraints = [
-        (
-            "interval_number_positive",
-            "CHECK(interval_number > 0)",
-            "The frequency must be strictly positive",
-        ),
-        (
-            "backward_days_positive",
-            "CHECK(backward_days >= 0)",
-            "The backward days must be positive",
-        ),
-    ]
+    _interval_number_positive = models.Constraint(
+        'CHECK(interval_number > 0)',
+        "The frequency must be strictly positive",
+    )
+    _backward_days_positive = models.Constraint(
+        'CHECK(backward_days >= 0)',
+        "The backward days must be positive",
+    )
 
     @api.depends("backward_days", "last_run")
     def _compute_download_start_date(self):
